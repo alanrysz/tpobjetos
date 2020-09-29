@@ -1,0 +1,176 @@
+object aldo {
+	
+	var property ahorros = 11000
+	
+	
+	method presupuestoDisponible() = ahorros * 0.2
+	
+	// si el dia de mañana tiene mas ambientes? cómo lo modelarían? además si en otro lado tienen que usar los ambientes, tienen que acordarse que habitación y cocina son ambientes, es poco práctico y tienen que repetir código
+	method superficieAPintar() = habitacion.superficieEnMetrosCuadrados() + cocina.superficieEnMetrosCuadrados()
+
+
+	method puedeContratarA(pintorx) = self.presupuestoDisponible() >= pintorx.cuantoCobraTotal(self.superficieAPintar())
+	
+	// hace falta hacer este método? no les llama la atención que está lo mismo dos veces con distinto nombre?
+	// la idea del polimorfismo es que no nos interesa si la pintura es por mayor o por menor
+	// los pintores deben entender el mismo mensaje independientemente de si es por mayor o por menor*
+	method puedeContratarAGranelA(pintorx) = self.presupuestoDisponible() > pintorx.cuantoCobraTotalAGranel(self.superficieAPintar())
+	
+	
+	//Agregados Parte 2
+	
+	
+	contratistasQuePuedeContratar(lista) = filter
+}
+
+
+object casaDeAldo{
+	const property cantidadPisos = 2
+	const property habitaciones = #{}
+	
+	method cantidadAmbientes() = habitaciones.size()
+	
+	method casaComplicada() = self.cantidadAmbientes() > 2 
+	
+	
+	
+	method habitaciones() = 
+}
+
+object habitacion {
+	
+	const property superficieEnMetrosCuadrados = 20
+
+
+}
+
+
+object cocina {
+	
+	const largo = 2
+	
+	const ancho = 1
+	
+	const altura = 3.5
+	
+	
+	method superficieEnMetrosCuadrados() = ((ancho + largo) * 2 * altura)
+}
+
+
+object pintorRaul {
+	//const precioPorMetroCuadrado = 70
+	
+	var property pintura = pintura.pintura //puse cualca 
+	
+	
+	method cuantoCobraManoDeObra(cantidadMetrosCuadrados) = ((70 * cantidadMetrosCuadrados)).roundUp()
+	
+	method cuantoCobraTotal(cantidadMetrosCuadrados) = (self.cuantoCobraManoDeObra(cantidadMetrosCuadrados) + pintura.precio(cantidadMetrosCuadrados))
+		
+}
+
+
+object pintoraCarla { 
+
+	
+	//const precioPorMetroCuadrado = 45
+	
+	method precioPorMetroCuadrado(cantidadMetrosCuadrados)=	if (cantidadMetrosCuadrados <= 25) 2* 45 else 1.5* 45
+	
+	method cuantoCobraTotal(metrosCuadrados, cantidadMetrosCuadrados) = (self.precioPorMetroCuadrado(cantidadMetrosCuadrados)*cantidadMetrosCuadrados
+}
+
+
+object pintorVenancio {
+	//const precioPorMetroCuadrado = 43
+	
+	method cuantoCobraManoDeObra(cantidadMetrosCuadrados) = ((43 * cantidadMetrosCuadrados))
+	
+	method cuantoCobraTotal(cantidadMetrosCuadrados) = (self.cuantoCobraManoDeObra(cantidadMetrosCuadrados) + (pintura.precio(cantidadMetrosCuadrados)/2))
+	
+	method cuantoCobraTotalAGranel(cantidadMetrosCuadrados) = (self.cuantoCobraManoDeObra(cantidadMetrosCuadrados) + (pinturaPorMayor.precio(cantidadMetrosCuadrados)/2))
+}
+
+
+object pintura {
+
+	const property rendimientoMetrosCuadrados = 50
+	
+	var property precioLata = 500
+	
+	
+	method precio(metrosCuadrados) = (metrosCuadrados/rendimientoMetrosCuadrados) * precioLata
+	
+	method cuantasLatasNecesito(metrosCuadrados) = (metrosCuadrados/rendimientoMetrosCuadrados).roundUp()
+}
+
+
+object pinturaPorMayor {
+	
+	var property precioPorLitro = 12
+	
+	var property conUnLitroPinto = 2
+	
+	
+	method cuantosLitrosNecesito(metrosCuadrados) = (metrosCuadrados / conUnLitroPinto)
+		
+	method precio(metrosCuadrados) = self.cuantosLitrosNecesito(metrosCuadrados) * precioPorLitro
+}
+
+// Los métodos polimórficos son cuantoCobraTotal(), cuantoCobraTotalAGranel(),
+// precio(metrosCuadrados). Esto quiere decir que los objetos comparten el mismo
+// método pero cada uno lo implementa a su manera, lo que nos permite preocuparnos
+// por el QUÉ y no por el CÓMO es que resuelve cada objeto estos métodos.
+// Los objetos involucrados son los pintores y, para el precio, las pinturas.
+
+
+//Parte 2
+
+object agencia{
+	
+const property contratistas = #{}
+
+//puedeContratarA(empleado) 
+
+method despedirEmpleado(empleado) = contratistas.remove(empleado)
+	
+}
+
+object arquitectaVeronica{
+	
+
+	method cuantoCobraTotal() = 20000 * casaDeAldo.cantidadPisos()
+	
+}
+
+
+object maestroMayorMarcos{
+	
+	method cobroPorCasa() = 50000 * casaDeAldo.cantidadAmbientes()
+	
+	method recargo() = self.cobroPorCasa() * 0.2
+	
+	method cuantoCobraTotal() = if (casaDeAldo.casaComplicada) self.cobroPorCasa() + self.recargo() else self.cobroPorCasa
+	
+	 
+}
+
+object electricistaFrancisca{
+	
+	method cobroTotal(n) = n * casaDeAldo.cantidadAmbientes()
+	
+	method cuantoCobraTotal() = if (casaDeAldo.casaComplicada) self.cobroTotal(200) else self.cobroTotal(100)
+
+}
+
+object plomeriaJacques{
+	
+	method cantidadDeAmbientesMayorATres() = casaDeAldo.cantidadAmbientes() > 3
+	
+	method cobroPorCasa() = 100 * casaDeAldo.cantidadAmbientes()
+	
+	method recargo() = self.cobroPorCasa() * 0.1
+	
+	method cuantoCobraTotal() = if (self.cantidadDeAmbientesMayorATres()) self.cobroPorCasa() + self.recargo() else self.cobroPorCasa()
+}
