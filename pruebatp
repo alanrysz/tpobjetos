@@ -1,7 +1,8 @@
 object aldo {
 	
+	const hoy = new Date()
 	var property ahorros = 11000
-	
+	const property arreglos = #{} // hacer funcion para agregar cada uno de los arreglos	
 	
 	method presupuestoDisponible() = ahorros * 0.2
 	
@@ -16,11 +17,7 @@ object aldo {
 	// los pintores deben entender el mismo mensaje independientemente de si es por mayor o por menor*
 	method puedeContratarAGranelA(pintorx) = self.presupuestoDisponible() > pintorx.cuantoCobraTotalAGranel(self.superficieAPintar())
 	
-	
-	//Agregados Parte 2
-	
-	
-	contratistasQuePuedeContratar(lista) = filter
+	method cuantoGastoEnArreglosLaUltimaSemana() = 	arreglos.sum ({arreglo => arreglo.cuantoCobraTotal()}) //ver lo de los dias
 }
 
 
@@ -34,7 +31,7 @@ object casaDeAldo{
 	
 	
 	
-	method habitaciones() = 
+	//method habitaciones() = 
 }
 
 object habitacion {
@@ -61,7 +58,7 @@ object cocina {
 object pintorRaul {
 	//const precioPorMetroCuadrado = 70
 	
-	var property pintura = pintura.pintura //puse cualca 
+	var property pintura = 50 //puse cualca 
 	
 	
 	method cuantoCobraManoDeObra(cantidadMetrosCuadrados) = ((70 * cantidadMetrosCuadrados)).roundUp()
@@ -76,9 +73,10 @@ object pintoraCarla {
 	
 	//const precioPorMetroCuadrado = 45
 	
-	method precioPorMetroCuadrado(cantidadMetrosCuadrados)=	if (cantidadMetrosCuadrados <= 25) 2* 45 else 1.5* 45
+	method precioPorMetroCuadrado(cantidadMetrosCuadrados)=	if (cantidadMetrosCuadrados <= 25) 2*45 else 1.5*45
 	
-	method cuantoCobraTotal(metrosCuadrados, cantidadMetrosCuadrados) = (self.precioPorMetroCuadrado(cantidadMetrosCuadrados)*cantidadMetrosCuadrados
+	method cuantoCobraTotal(cantidadMetrosCuadrados)= self.precioPorMetroCuadrado(cantidadMetrosCuadrados)*cantidadMetrosCuadrados
+
 }
 
 
@@ -131,7 +129,11 @@ object agencia{
 	
 const property contratistas = #{}
 
-//puedeContratarA(empleado) 
+method empleadosQuePuedoContratar() = contratistas.filter({empleado => aldo.puedeContratarA(empleado)})
+
+method empleadosContratados() = contratistas.map {empleado => empleado.empleadosQuePuedoContratar()	}
+
+method contratarEmpleado(empleado) = contratistas.add(empleado)
 
 method despedirEmpleado(empleado) = contratistas.remove(empleado)
 	
@@ -147,12 +149,11 @@ object arquitectaVeronica{
 
 object maestroMayorMarcos{
 	
-	method cobroPorCasa() = 50000 * casaDeAldo.cantidadAmbientes()
+	method cobroPorCasa(cantidadDeAmbientes) = 50000 * cantidadDeAmbientes
 	
-	method recargo() = self.cobroPorCasa() * 0.2
+	method recargo(cantidadDeAmbientes) = self.cobroPorCasa(cantidadDeAmbientes) * 0.2
 	
-	method cuantoCobraTotal() = if (casaDeAldo.casaComplicada) self.cobroPorCasa() + self.recargo() else self.cobroPorCasa
-	
+	method cuantoCobraTotal(cantidadDeAmbientes) = if (casaDeAldo.casaComplicada()) self.cobroPorCasa(cantidadDeAmbientes) + self.recargo(cantidadDeAmbientes) else self.cobroPorCasa(cantidadDeAmbientes)
 	 
 }
 
@@ -160,17 +161,17 @@ object electricistaFrancisca{
 	
 	method cobroTotal(n) = n * casaDeAldo.cantidadAmbientes()
 	
-	method cuantoCobraTotal() = if (casaDeAldo.casaComplicada) self.cobroTotal(200) else self.cobroTotal(100)
+	method cuantoCobraTotal() = if (casaDeAldo.casaComplicada()) self.cobroTotal(200) else self.cobroTotal(100)
 
 }
 
 object plomeriaJacques{
 	
-	method cantidadDeAmbientesMayorATres() = casaDeAldo.cantidadAmbientes() > 3
+	method cantidadDeAmbientesMayorATres(cantidadDeAmbientes) = cantidadDeAmbientes > 3
 	
-	method cobroPorCasa() = 100 * casaDeAldo.cantidadAmbientes()
+	method cobroPorCasa(cantidadDeAmbientes) = 100 * cantidadDeAmbientes
 	
-	method recargo() = self.cobroPorCasa() * 0.1
+	method recargo(cantidadDeAmbientes) = self.cobroPorCasa(cantidadDeAmbientes) * 0.1 //recargo(cantidadDeAmbientes) esta bien?
 	
-	method cuantoCobraTotal() = if (self.cantidadDeAmbientesMayorATres()) self.cobroPorCasa() + self.recargo() else self.cobroPorCasa()
+	method cuantoCobraTotal(cantidadDeAmbientes) = if (self.cantidadDeAmbientesMayorATres(cantidadDeAmbientes)) self.cobroPorCasa(cantidadDeAmbientes) + self.recargo(cantidadDeAmbientes) else self.cobroPorCasa(cantidadDeAmbientes)
 }
